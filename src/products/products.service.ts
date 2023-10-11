@@ -73,11 +73,11 @@ export class ProductsService {
   async updateProduct(id: number, product: UpdateProductDto) {
     const findProduct = await this.findProductId(id);
     let result=null;
-    console.log(product.nombre);
+
     if (findProduct) {
       if(product.nombre!=undefined){
         const duplicatedNameProduct=await this.productRepository.findOne({where:{nombre:product.nombre,id:Not(id)}});
-        console.log(duplicatedNameProduct);
+        
         if(duplicatedNameProduct){
           result=new HttpException("nombre duplicado",HttpStatus.CONFLICT);
         }
