@@ -1,4 +1,4 @@
-import { Body, Controller,Param ,Post,Get,ParseIntPipe, Delete, Put, HttpException, NotFoundException, Query, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller,Param ,Post,Get,ParseIntPipe, Delete, HttpException , Query, Put } from '@nestjs/common';
 
 
 import { CreateproductDto } from './dto/createProduct.dto';
@@ -13,38 +13,34 @@ export class ProductsController {
     }
 
     @Post() 
-    @UsePipes(ValidationPipe)
-    createProduct(@Body()newProduct:CreateproductDto){
-        try{
-            const createdProduct=this.productService.createProduct(newProduct);
-            return createdProduct;
-        }catch (error) {
-            if(error instanceof HttpException)
-                throw new Error();
-        }
+    createProduct(@Body() newProduct:CreateproductDto):Promise<Product|HttpException>{
+        return this.productService.createProduct(newProduct);
     }
 
     @Get()
-    getProducts(@Query('page')page:number,@Query('limit')limit:number){
+    getProducts(@Query('page') page:number,@Query('limit') limit:number):Promise<Product[]|HttpException>{
+        let resultado;
         if((limit&&!page)||(limit&&page)){
-            return this.productService.getPaginatedProducts(page,limit);
+            resultado= this.productService.getPaginatedProducts(page,limit);
         }
-        else
-            return this.productService.getProducts();
+        else{
+            resultado= this.productService.getProducts();
+        }
+        return resultado;
     }
     
     @Get(':id')
-    getProduct(@Param('id',ParseIntPipe) id:number){
+    getProduct(@Param('id',ParseIntPipe) id:number):Promise<Product|HttpException>{
         return this.productService.getProduct(id);
     }
     
     @Delete(':id')
-    deleteProduct(@Param('id',ParseIntPipe)id:number){
+    deleteProduct(@Param('id',ParseIntPipe) id:number):Promise<Product|HttpException>{
         return this.productService.deleteProduct(id);
     }
+    
     @Put(':id')
-    @UsePipes(ValidationPipe)
-    updateProduct(@Param('id',ParseIntPipe)id:number,@Body()updatedProduct:UpdateProductDto){
+    updateProduct(@Param('id',ParseIntPipe) id:number,@Body() updatedProduct:UpdateProductDto):Promise<Product|HttpException>{
         return this.productService.updateProduct(id,updatedProduct);
     }
 }
