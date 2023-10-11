@@ -1,4 +1,4 @@
-import { Injectable,HttpException,HttpStatus } from '@nestjs/common';
+import { Injectable,HttpException,HttpStatus, HttpCode } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm'; //uses default repository
 import { paginate } from 'nestjs-typeorm-paginate';
 import { Repository } from 'typeorm';
@@ -41,7 +41,7 @@ export class ProductsService {
         if(findProduct){
             return findProduct;
         }
-        return new HttpException("Producto no encontrado",HttpStatus.NOT_FOUND);
+        return this.returnNotFound();
     }
     async deleteProduct(id:number){
         const deleteResult=await this.productRepository.delete(id);

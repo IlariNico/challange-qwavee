@@ -1,4 +1,4 @@
-import { Body, Controller,Param ,Post,Get,ParseIntPipe, Delete, Put, HttpException, NotFoundException, Query } from '@nestjs/common';
+import { Body, Controller,Param ,Post,Get,ParseIntPipe, Delete, Put, HttpException, NotFoundException, Query, UsePipes, ValidationPipe } from '@nestjs/common';
 
 
 import { CreateproductDto } from './dto/createProduct.dto';
@@ -13,6 +13,7 @@ export class ProductsController {
     }
 
     @Post() 
+    @UsePipes(ValidationPipe)
     createProduct(@Body()newProduct:CreateproductDto){
         try{
             const createdProduct=this.productService.createProduct(newProduct);
@@ -25,23 +26,16 @@ export class ProductsController {
 
     @Get()
     getProducts(@Query('page')page:number,@Query('limit')limit:number){
-
         if((limit&&!page)||(limit&&page)){
             return this.productService.getPaginatedProducts(page,limit);
         }
-            
         else
             return this.productService.getProducts();
     }
+    
     @Get(':id')
     getProduct(@Param('id',ParseIntPipe) id:number){
-        try{
-            const product=this.productService.getProduct(id);
-            return product;
-        }
-        catch(err){
-            throw new Error("not found");
-        }
+        return this.productService.getProduct(id);
     }
     
     @Delete(':id')
@@ -49,6 +43,7 @@ export class ProductsController {
         return this.productService.deleteProduct(id);
     }
     @Put(':id')
+    @UsePipes(ValidationPipe)
     updateProduct(@Param('id',ParseIntPipe)id:number,@Body()updatedProduct:UpdateProductDto){
         return this.productService.updateProduct(id,updatedProduct);
     }
