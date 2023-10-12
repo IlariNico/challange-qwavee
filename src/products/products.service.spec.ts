@@ -29,7 +29,7 @@ describe('ProductsService', () => {
       parseInt(id, 10);
       const selectedProduct=findProductById(id);
       const updatedProduct = Object.assign({}, selectedProduct, productDto);
-      database[0]=updatedProduct;
+      
       return updatedProduct;
     }),
     find:jest.fn().mockImplementation(()=>{

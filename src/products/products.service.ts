@@ -75,22 +75,27 @@ export class ProductsService {
   }
 
   async updateProduct(id: number, product: UpdateProductDto) {
+    
     const findProduct = await this.findProductId(id);
     let result=null;
     if (findProduct) {
-      if(product.nombre!=undefined){
-        
-        const duplicatedNameProduct=await this.productRepository.findOne({where:{nombre:product.nombre,id:Not(id)}});
-        if(duplicatedNameProduct){
-          result=new HttpException("nombre duplicado",HttpStatus.CONFLICT);
+      if(Object.keys(product).length>0){
+        if(product.nombre!=undefined){
+          
+          const duplicatedNameProduct=await this.productRepository.findOne({where:{nombre:product.nombre,id:Not(id)}});
+          if(duplicatedNameProduct){
+            result=new HttpException("nombre duplicado",HttpStatus.CONFLICT);
+          }
+        }
+        if(result===null){
+          result=await this.productRepository.update({ id }, product);
+          result = await this.findProductId(id);
+          
         }
       }
-      if(result===null){
-        result=await this.productRepository.update({ id }, product);
-        result = await this.findProductId(id);
-        
+      else{
+        return new HttpException("no se puede modificar sin parámetros",HttpStatus.BAD_REQUEST);
       }
-
     }
     else{
       result= this.returnNotFound();

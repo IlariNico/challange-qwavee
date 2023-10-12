@@ -5,6 +5,7 @@ import { CreateproductDto } from './dto/createProduct.dto';
 import { UpdateProductDto } from './dto/updateProduct.dto';
 import { Product } from './product.entity';
 import { ProductsService } from './products.service';
+import { isNumber } from 'class-validator';
 
 
 @Controller('productos') //in the code i use the classes names in english but i specify the endpoint in spanish as peer the requirements
@@ -18,9 +19,11 @@ export class ProductsController {
     }
 
     @Get()
-    getProducts(@Query('page') page:number,@Query('limit') limit:number):Promise<Product[]|HttpException>{
+    getProducts(@Query('page') page,@Query('limit') limit):Promise<Product[]|HttpException>{
         let resultado;
-        if((limit&&!page)||(limit&&page)){
+        page=parseInt(page);
+        limit=parseInt(limit);
+        if(((isNumber(limit)&&isNumber(page)))){
             resultado= this.productService.getPaginatedProducts(page,limit);
         }
         else{

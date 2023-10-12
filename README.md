@@ -2,72 +2,54 @@
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+# Base de Datos
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+- Nombre: njs_challenge_db
+- Tipo: MySQL
+- Host: localhost
+- Puerto: 3306
+- Username: root
+- Contraseña: "" (ninguna)
 
-## Description
+**Nota:** La base de datos debe crearse y TypeORM se encargará de crear y actualizar la tabla.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+# Endpoints
 
-## Installation
+Todos los endpoints se definen a partir de la ruta http://localhost:3000.
 
-```bash
-$ npm install
-```
+## POST /productos
 
-## Running the app
+Tipo de objeto esperado:
 
-```bash
-# development
-$ npm run start
+- Nombre del producto: cadena de al menos 4 caracteres, máximo 150 (debe ser único en la base de datos).
+- Precio del producto: número entero positivo.
+- Descripción: cadena de al menos 8 caracteres, máximo 255.
 
-# watch mode
-$ npm run start:dev
+Los campos no son opcionales, son obligatorios. Ejemplo de solicitud:
 
-# production mode
-$ npm run start:prod
-```
+```json
+{
+  "nombre": "Nombre del producto",
+  "precio": 999,
+  "descripcion": "Esta es una buena descripción"
+}
+GET /productos
+Parámetros opcionales para paginación. Ejemplo de URL: /productos?page=1&limit=2. Ambos page y limit deben establecerse como números enteros para funcionar. Si se usa solo /productos, se devolverán todos los objetos almacenados en la base de datos.
 
-## Test
+GET /productos/:id
+Parámetro obligatorio: id. Retorna el objeto especificado si existe, de lo contrario, devuelve una excepción HTTP.
 
-```bash
-# unit tests
-$ npm run test
+PUT /productos/:id
+Parámetros opcionales: Se pueden omitir cualquier campo, pero al menos uno debe enviarse o se generará una excepción de solicitud incorrecta. El nombre no debe existir en la base de datos, ya que debe ser único (a menos que sea el mismo nombre antes de la operación).
 
-# e2e tests
-$ npm run test:e2e
+{
+  "nombre": "Nombre del producto",
+  "precio": 999,
+  "descripcion": "Esta es una buena descripción"
+}
 
-# test coverage
-$ npm run test:cov
-```
 
-## Support
+DELETE /productos/:id
+El id no es opcional. Este endpoint se encarga de eliminar la tupla con el id especificado de la base de datos. Si no se envía un id válido, se generará una excepción.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+Readme emprolijado utilizando chatGPT.
