@@ -60,12 +60,16 @@ export class ProductsService {
 
   async deleteProduct(id: number) {
     let result;
+    const productToDelete=await this.findProductId(id);
     const deleteResult = await this.productRepository.delete(id);
+    
     if (deleteResult.affected === 0) {
+      
       result= this.returnNotFound();
     }
     else{
-      result=deleteResult;
+      
+      result=productToDelete;
     } 
     return result;
   }
@@ -73,11 +77,10 @@ export class ProductsService {
   async updateProduct(id: number, product: UpdateProductDto) {
     const findProduct = await this.findProductId(id);
     let result=null;
-
     if (findProduct) {
       if(product.nombre!=undefined){
-        const duplicatedNameProduct=await this.productRepository.findOne({where:{nombre:product.nombre,id:Not(id)}});
         
+        const duplicatedNameProduct=await this.productRepository.findOne({where:{nombre:product.nombre,id:Not(id)}});
         if(duplicatedNameProduct){
           result=new HttpException("nombre duplicado",HttpStatus.CONFLICT);
         }
@@ -85,6 +88,7 @@ export class ProductsService {
       if(result===null){
         result=await this.productRepository.update({ id }, product);
         result = await this.findProductId(id);
+        
       }
 
     }
