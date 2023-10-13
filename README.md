@@ -34,13 +34,13 @@ Los campos no son opcionales, son obligatorios. Ejemplo de solicitud:
   "descripcion": "Esta es una buena descripción"
 }
 ```
-##GET /productos
+## GET /productos
 -Parámetros opcionales para paginación. Ejemplo de URL: /productos?page=1&limit=2. Ambos page y limit deben establecerse como números enteros para funcionar. Si se usa solo /productos, se devolverán todos los objetos almacenados en la base de datos.
 
-##GET /productos/:id
+## GET /productos/:id
 -Parámetro obligatorio: id. Retorna el objeto especificado si existe, de lo contrario, devuelve una excepción HTTP.
 
-##PUT /productos/:id
+## PUT /productos/:id
 -Parámetros opcionales: Se pueden omitir cualquier campo, pero al menos uno debe enviarse o se generará una excepción de solicitud incorrecta. El nombre no debe existir en la base de datos, ya que debe ser único (a menos que sea el mismo nombre antes de la operación).
 ```json
 {
@@ -50,7 +50,7 @@ Los campos no son opcionales, son obligatorios. Ejemplo de solicitud:
 }
 ```
 
-##DELETE /productos/:id
+## DELETE /productos/:id
 -El id no es opcional. Este endpoint se encarga de eliminar la tupla con el id especificado de la base de datos. Si no se envía un id válido, se generará una excepción.
 
 Readme emprolijado utilizando chatGPT.
