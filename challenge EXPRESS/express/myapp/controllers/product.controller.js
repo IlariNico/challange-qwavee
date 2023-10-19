@@ -20,7 +20,6 @@ router.get('/products/:id',async (req,res)=>{
 
 router.post('/products',async (req,res)=>{
     const product=await productService.createProduct(req.body);
-    console.log(product);
     if(product!=undefined){
         res.status(201).json(product);
     }
